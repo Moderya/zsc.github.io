@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人简历表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;
+        }
+        
+        body {
+            padding: 20px;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .resume-container {
+            width: 100%;
+            max-width: 1100px;
+            background: white;
+            border-collapse: collapse;
+            border: 2px solid #333;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .row {
+            display: flex;
+            border-bottom: 1px solid #333;
+            min-height: 40px;
+        }
+        
+        .row:last-child {
+            border-bottom: none;
+        }
+        
+        .cell {
+            border-right: 1px solid #333;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cell:last-child {
+            border-right: none;
+        }
+        
+        .main-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px;
+            justify-content: center;
+        }
+        
+        .section-title {
+            background: #f8f8f8;
+            font-weight: bold;
+            width: 100px;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .basic-info-container {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+            position: relative;
+        }
+        
+        .photo-column {
+            width: 120px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-left: 1px solid #e0e0e0;
+        }
+        
+        .photo-placeholder {
+            width: 100px;
+            height: 120px;
+            border: 1px dashed #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9f9f9;
+            margin-bottom: 8px;
+            overflow: hidden; /* 防止图片溢出 */
+            cursor: pointer; /* 鼠标悬浮显示手型 */
+        }
+        
+        .photo-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        /* 上传按钮样式 */
+        .upload-btn {
+            padding: 4px 12px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 5px;
+            outline: none;
+        }
+        
+        .upload-btn:hover {
+            background: #3367d6;
+        }
+        
+        /* 隐藏原生文件输入框 */
+        #fileInput {
+            display: none;
+        }
+        
+        .info-group {
+            display: flex;
+            width: calc(50% - 60px); /* 减去照片栏宽度的一半 */
+            min-height: 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-group:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+        
+        .info-group:nth-child(odd) .info-label {
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .info-label {
+            width: 100px;
+            font-weight: bold;
+            padding: 8px 10px;
+            background: #f8f8f8;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .info-value {
+            flex: 1;
+            padding: 8px 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .content-cell {
+            flex: 1;
+            padding: 15px;
+            text-align: justify;
+            text-indent: 2em;
+            line-height: 1.8;
+        }
+        
+        .certificate-cell,
+        .hobby-cell {
+            flex: 1;
+            padding: 10px 15px;
+        }
+        
+        .certificate-item,
+        .hobby-item {
+            margin: 6px 0;
+            padding-left: 10px;
+            font-weight: bold;
+        }
+        
+        /* 针对长内容的组 */
+        .full-width-group {
+            width: calc(100% - 120px); /* 减去照片栏宽度 */
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+            
+            .resume-container {
+                box-shadow: none;
+                margin: 0;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .section-title {
+                width: 80px;
+                font-size: 14px;
+            }
+            
+            .photo-column {
+                position: relative;
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #e0e0e0;
+                order: 1;
+            }
+            
+            .info-group {
+                width: 100%;
+            }
+            
+            .info-group:nth-child(odd) .info-label {
+                border-right: none;
+            }
+            
+            .full-width-group {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-container">
+        <!-- 标题行 -->
+        <div class="row">
+            <div class="cell main-title" style="border-right: none;">
+                个人简历表
+            </div>
+        </div>
+        
+        <!-- 基本信息 -->
+        <div class="row">
+            <div class="cell section-title">基本信息</div>
+            <div class="cell basic-info-container">
+                <!-- 左侧信息 -->
+                <div class="info-group">
+                    <div class="info-label">姓名</div>
+                    <div class="info-value">张仕成</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">性别</div>
+                    <div class="info-value">男</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">出生日期</div>
+                    <div class="info-value">2005.02.10</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">民族</div>
+                    <div class="info-value">汉</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">政治面貌</div>
+                    <div class="info-value">团员</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">婚姻状况</div>
+                    <div class="info-value">未婚</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">学历</div>
+                    <div class="info-value">本科</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">联系地址</div>
+                    <div class="info-value">江苏省无锡市泰伯花苑83-402</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">专业</div>
+                    <div class="info-value">测绘工程</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">联系电话</div>
+                    <div class="info-value">19567082861</div>
+                </div>
+                <div class="info-group full-width-group" style="border-bottom: none;">
+                    <div class="info-label">E-mail</div>
+                    <div class="info-value">3928481560@qq.com</div>
+                </div>
+                <div class="info-group full-width-group" style="border-bottom: none;">
+                    <div class="info-label">毕业院校</div>
+                    <div class="info-value">西南林业大学</div>
+                </div>
+                
+                <!-- 右侧照片栏（新增上传按钮） -->
+                <div class="photo-column">
+                    <div class="photo-placeholder" id="photoContainer">
+                        <div id="photoTip" style="text-align: center; color: #999; font-size: 12px;">
+                            照片<br>
+                            (100×120)
+                        </div>
+                    </div>
+                    <div class="photo-label">个人照片</div>
+                    <!-- 上传按钮 -->
+                    <button class="upload-btn" id="uploadBtn">选择照片</button>
+                    <!-- 隐藏的原生文件输入框 -->
+                    <input type="file" id="fileInput" accept="image/jpg, image/jpeg, image/png, image/gif">
+                </div>
+            </div>
+        </div>
+        
+        <!-- 学习经历 -->
+        <div class="row">
+            <div class="cell section-title">学习经历</div>
+            <div class="cell content-cell">
+                自入学以来，我深耕测绘、遥感与GIS专业领域，坚持理论与实践深度融合的学习模式。课堂上，系统掌握测量学、遥感图像处理、GIS空间分析等核心课程知识，构建扎实的专业知识体系；课后自主钻研C# WinForms编程技术，熟练运用该技术开展测绘数据可视化与处理系统的开发实践。实践环节中，全程参与地形测量外业数据采集、遥感影像解译、GIS空间建模等多项专业实验与实习项目，熟练完成从数据预处理、分析计算到实验报告撰写的全流程工作，积累了丰富的实操经验与问题解决能力。我始终以严谨的态度对待专业学习，致力于将理论知识转化为实际应用能力，为投身测绘地理信息行业筑牢基础。
+            </div>
+        </div>
+        
+        <!-- 工作经历 -->
+        <div class="row">
+            <div class="cell section-title">工作经历</div>
+            <div class="cell content-cell">
+                补习班助教：负责协助任课老师完成日常教学与课堂管理工作，包括作业批改、课堂秩序维护、学习情况记录等。在课后辅导中，针对学生的薄弱环节进行一对一讲解，帮助多名学生提升学习成绩与学习积极性。同时参与整理教学资料、制作习题集与学习计划，提高课堂教学效率。通过与家长保持沟通，及时反馈学生学习状态，增强家校协作效果。
+            </div>
+        </div>
+        
+        <!-- 证书技能 -->
+        <div class="row">
+            <div class="cell section-title">证书技能</div>
+            <div class="cell certificate-cell">
+                <div class="certificate-item">四级证书</div>
+                <div class="certificate-item">普通话乙级</div>
+                <div class="certificate-item">校园足球联赛第五名</div>
+            </div>
+        </div>
+        
+        <!-- 爱好特长 -->
+        <div class="row">
+            <div class="cell section-title">爱好特长</div>
+            <div class="cell hobby-cell">
+                <div class="hobby-item">踢足球</div>
+                <div class="hobby-item">打羽毛球</div>
+                <div class="hobby-item">跑步</div>
+            </div>
+        </div>
+        
+        <!-- 自我评价 -->
+        <div class="row">
+            <div class="cell section-title">自我评价</div>
+            <div class="cell content-cell">
+                在生活里，我是一个自律严谨、乐于协作的人。日常作息规律，做事条理清晰，习惯提前规划学习与生活事务，始终保持高效的时间管理能力。待人真诚友善，善于倾听他人想法，在团队协作中能主动分担任务、积极沟通配合，和身边人相处融洽。同时，我有着较强的适应能力与责任心，面对生活中的突发情况能冷静应对、妥善处理；闲暇时会通过户外徒步放松身心，也会钻研专业相关的技术与工具，在劳逸结合中不断充实自我，始终以积极乐观的心态面对生活中的挑战。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('简历页面已加载完成');
+            
+            // 获取元素
+            const uploadBtn = document.getElementById('uploadBtn');
+            const fileInput = document.getElementById('fileInput');
+            const photoContainer = document.getElementById('photoContainer');
+            const photoTip = document.getElementById('photoTip');
+            
+            // 点击"选择照片"按钮，触发原生文件输入框
+            uploadBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // 选择本地图片后，预览到照片栏
+            fileInput.addEventListener('change', function(e) {
+                // 获取选中的文件
+                const file = e.target.files[0];
+                if (!file) {
+                    return;
+                }
+                
+                // 验证文件类型是否为图片
+                const validTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+                if (!validTypes.includes(file.type)) {
+                    alert('请选择jpg、jpeg、png或gif格式的图片！');
+                    return;
+                }
+                
+                // 创建文件读取器
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    // 创建图片元素
+                    const photoImg = document.createElement('img');
+                    photoImg.src = event.target.result;
+                    photoImg.style.width = '100%';
+                    photoImg.style.height = '100%';
+                    photoImg.style.objectFit = 'cover'; // 保持图片比例，填充容器
+                    
+                    // 清空占位符，插入预览图片
+                    photoContainer.innerHTML = '';
+                    photoContainer.appendChild(photoImg);
+                };
+                
+                // 读取本地文件为DataURL格式（用于预览）
+                reader.readAsDataURL(file);
+            });
+            
+            // 可选：点击照片占位符也可触发上传
+            photoContainer.addEventListener('click', function() {
+                fileInput.click();
+            });
+        });
+    </script>
+</body>
+</html>
